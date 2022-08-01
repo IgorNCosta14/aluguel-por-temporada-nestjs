@@ -1,3 +1,7 @@
+import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+
+import { v4 as uuidV4 } from 'uuid';
+
 @Entity('users')
 export class User {
   @PrimaryColumn()
@@ -18,9 +22,9 @@ export class User {
   @Column()
   userPermission: number;
 
-  @ManyToOne(() => Permission)
-  @JoinColumn({ name: 'userPermission' })
-  permission: Permission;
+  // @ManyToOne(() => Permission)
+  // @JoinColumn({ name: 'userPermission' })
+  // permission: Permissions;
 
   @Column()
   activeUser: boolean;
