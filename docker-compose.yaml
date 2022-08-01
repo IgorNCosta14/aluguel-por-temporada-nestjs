@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  database:
+    image: postgres
+    container_name: database_aluguelNest
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=aluguelNest
+      - POSTGRES_PASSWORD=aluguelNest
+      - POSTGRES_DB=aluguelNest
+    volumes:
+      - pgdata:/data/postgres
+  app:
+    build: .
+    container_name: aluguelNest
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/app
+    links:
+      - database
+    depends_on:
+      - database
+
+volumes:
+  pgdata:
+    driver: local
