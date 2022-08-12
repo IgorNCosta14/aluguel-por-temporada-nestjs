@@ -33,33 +33,48 @@ export class UsersService {
   }
 
   async list(): Promise<User[]> {
-    const users = await this.repository
-      .find
-      //   {
-      //   relations: ["permission"]
-      // }
-      ();
+    const users = await this.repository.find();
+    //   {
+    //   relations: ["permission"]
+    // }
+    return users;
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.repository.findOne({ where: { email } });
+
+    return user;
+  }
+
+  async findByCPF(cpf: string): Promise<User> {
+    const user = await this.repository.findOne({ where: { cpf } });
+
+    return user;
+  }
+
+  async findByName(name: string): Promise<User[]> {
+    const users = await this.repository.find({ where: { name } });
 
     return users;
   }
 
-  async findByEmail(email: string) {
-    return `This action returns a #${email} user`;
+  async findById(id: string): Promise<User> {
+    const user = await this.repository.findOne({
+      where: { id } /*relations: ["permission"]*/,
+    });
+
+    return user;
   }
 
-  async findByCPF(cpf: string) {
-    return `This action returns a #${cpf} user`;
+  async updateToLandLord(id: string): Promise<void> {
+    const user = await this.repository.findOne({ where: { id } });
+
+    user.userPermission = 2;
+
+    await this.repository.save(user);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async deactivatingUser(data: User): Promise<void> {
+    await this.repository.save(data);
   }
 }
