@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,7 +23,7 @@ export class UsersController {
   ) {}
 
   @Post()
-  async create(
+  async createUser(
     @Body() { name, cpf, email, password }: CreateUserDto,
   ): Promise<User> {
     if (this.utilsService.validateEmail(email) === false) {
@@ -58,22 +59,44 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async listUsers(): Promise<User[]> {
+    const users = await this.usersService.list();
+
+    return users;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  @Get('/find')
+  async findOne(@Query('name') name: string): Promise<User[]> {
+    const users = await this.usersService.findByName(name);
+
+    if (users.length === 0) {
+      throw new Error('No user found with this name!');
+    }
+
+    return users;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Patch('/tolandlord/:id')
+  async update(@Param('id') id: string): Promise<void> {
+    const user = await this.usersService.findById(id);
+
+    if (user.userPermission > 1) {
+      throw new Error('User already is landlord or admin!');
+    }
+
+    await this.usersService.updateToLandLord(id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Delete('/deactivatinguser/:id')
+  async remove(@Param('id') id: string) {
+    const user = await this.usersService.findById(id);
+
+    if (!user) {
+      throw new Error('User not found!');
+    }
+
+    user.activeUser = false;
+
+    await this.usersService.deactivatingUser(user);
   }
 }
