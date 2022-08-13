@@ -5,12 +5,10 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UtilsService } from 'src/utils/utils.service';
 import { hash } from 'bcryptjs';
@@ -32,9 +30,9 @@ export class UsersController {
 
     const emailAlreadyInUse = await this.usersService.findByEmail(email);
 
-    // if (emailAlreadyInUse) {
-    //   throw new Error('Email already in use!');
-    // }
+    if (emailAlreadyInUse) {
+      throw new Error('Email already in use!');
+    }
 
     if (this.utilsService.validateCPF(cpf) === false) {
       throw new Error('Invalid cpf!');
@@ -42,9 +40,9 @@ export class UsersController {
 
     const cpfAlreadyRegistered = await this.usersService.findByCPF(cpf);
 
-    // if (cpfAlreadyRegistered) {
-    //   throw new Error('CPF already registered!');
-    // }
+    if (cpfAlreadyRegistered) {
+      throw new Error('CPF already registered!');
+    }
 
     const passwordHash = await hash(password, 8);
 
@@ -87,8 +85,8 @@ export class UsersController {
     await this.usersService.updateToLandLord(id);
   }
 
-  @Delete('/deactivatinguser/:id')
-  async remove(@Param('id') id: string) {
+  @Patch('/deactivatinguser/:id')
+  async remove(@Param('id') id: string): Promise<void> {
     const user = await this.usersService.findById(id);
 
     if (!user) {
