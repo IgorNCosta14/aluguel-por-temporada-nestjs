@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { UtilsService } from './utils/utils.service';
+import { PermissionsModule } from './users/permissions/permissions.module';
+import { Permission } from './users/permissions/entities/permission.entity';
+import { PropertiesModule } from './properties/properties.module';
+import { Address } from './properties/address/entities/address.entity';
+import { Property } from './properties/entities/property.entity';
 
 @Module({
   imports: [
@@ -13,11 +16,12 @@ import { UtilsService } from './utils/utils.service';
       database: __dirname + '/db.sqlite',
       synchronize: true,
       logging: true,
-      entities: [User],
+      entities: [User, Permission, Address, Property],
     }),
     UsersModule,
+    PermissionsModule,
+    PropertiesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, UtilsService],
+  providers: [UtilsService],
 })
 export class AppModule {}
