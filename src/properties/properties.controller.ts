@@ -88,36 +88,36 @@ export class PropertiesController {
     return properties;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.propertiesService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.propertiesService.findOne(+id);
+  // }
 
-  @Get('/zipCode')
-  findOne(@Param('id') id: string) {
-    return this.propertiesService.findOne(+id);
-  }
+  // @Get('/zipCode')
+  // findOne(@Param('id') id: string) {
+  //   return this.propertiesService.findOne(+id);
+  // }
 
-  @Get('/type')
-  findOne(@Param('id') id: string) {
-    return this.propertiesService.findOne(+id);
-  }
+  // @Get('/type')
+  // findOne(@Param('id') id: string) {
+  //   return this.propertiesService.findOne(+id);
+  // }
 
-  @Get('/userproperty')
-  findOne(@Param('id') id: string) {
-    return this.propertiesService.findOne(+id);
-  }
+  // @Get('/userproperty')
+  // findOne(@Param('id') id: string) {
+  //   return this.propertiesService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updatePropertyDto: UpdatePropertyDto,
-  ) {
-    return this.propertiesService.update(+id, updatePropertyDto);
-  }
+  // @Patch(':id')
+  // update(
+  //   @Param('id') id: string,
+  //   @Body() updatePropertyDto: UpdatePropertyDto,
+  // ) {
+  //   return this.propertiesService.update(+id, updatePropertyDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.propertiesService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.propertiesService.remove(+id);
+  // }
 }
