@@ -33,10 +33,10 @@ export class UsersService {
   }
 
   async list(): Promise<User[]> {
-    const users = await this.repository.find();
-    //   {
-    //   relations: ["permission"]
-    // }
+    const users = await this.repository.find({
+      relations: ['permission'],
+    });
+
     return users;
   }
 
