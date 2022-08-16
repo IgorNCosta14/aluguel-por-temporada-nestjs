@@ -16,6 +16,7 @@ export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(CheckAuthenticatesMiddleware)
-      .forRoutes({ path: 'users', method: RequestMethod.GET });
+      .exclude({ path: 'users/(.*)', method: RequestMethod.POST })
+      .forRoutes(UsersController);
   }
 }
