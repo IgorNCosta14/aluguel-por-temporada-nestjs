@@ -11,7 +11,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { UtilsService } from 'src/utils/utils.service';
-import { hash } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
+import { IRequest, IResponse } from './interfaces/authenticate-user.interface';
+import { sign } from 'jsonwebtoken';
 
 @Controller('users')
 export class UsersController {
@@ -54,6 +56,42 @@ export class UsersController {
     });
 
     return user;
+  }
+
+  @Post('/sessions')
+  async authenticate(
+    @Body() { email, password }: IRequest,
+  ): Promise<IResponse> {
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user) {
+      throw new Error('Email or password incorrect');
+    }
+
+    if (user.activeUser === false) {
+      throw new Error('Inactive user!');
+    }
+
+    const passwordMatch = await compare(password, user.password);
+
+    if (!passwordMatch) {
+      throw new Error('Email or password incorrect');
+    }
+
+    const token = sign({}, 'e3928a3bc4be46516aa33a79bbdfdb08', {
+      subject: user.id,
+      expiresIn: '5d',
+    });
+
+    const tokenResp: IResponse = {
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+      },
+    };
+
+    return tokenResp;
   }
 
   @Get()
