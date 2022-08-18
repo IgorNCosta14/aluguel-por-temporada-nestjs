@@ -3,13 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
+  Request,
   Delete,
 } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
-import { UpdatePropertyDto } from './dto/update-property.dto';
 import { AddressService } from './address/address.service';
 
 @Controller('properties')
@@ -35,7 +34,7 @@ export class PropertiesController {
       propertyNumber,
       lateFee,
     }: CreatePropertyDto,
-    propertyOwner: 'test',
+    @Request() req,
   ) {
     if (dailyRate <= 0) {
       throw new Error('Daily rate must be greater than zero!');
@@ -58,7 +57,7 @@ export class PropertiesController {
         propertyName,
         description,
         typeProperty,
-        propertyOwner,
+        propertyOwner: req.user.id,
         propertyAddressId: address.id,
         propertyNumber,
         dailyRate,
@@ -71,7 +70,7 @@ export class PropertiesController {
         propertyName,
         description,
         typeProperty,
-        propertyOwner,
+        propertyOwner: req.user.id,
         propertyAddressId: address.id,
         propertyNumber,
         dailyRate,
@@ -116,8 +115,21 @@ export class PropertiesController {
   //   return this.propertiesService.update(+id, updatePropertyDto);
   // }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.propertiesService.remove(+id);
-  // }
+  @Delete(':id')
+  async remove(@Param('id') { id }, @Request() req) {
+    const propertyExists = await this.propertiesService.findById(id);
+
+    console.log(id, req.user.id);
+
+    if (!propertyExists) {
+      throw new Error("Property doesn't exist!");
+    }
+
+    if (propertyExists.propertyOwner != req.user.id) {
+      throw new Error('User must be the owner of the property to delete it!');
+    }
+
+    await this.propertiesService.delete(id);
+    return;
+  }
 }
