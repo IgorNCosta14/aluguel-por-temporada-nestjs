@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Permission } from './permissions/entities/permission.entity';
 import { CheckAuthenticatesMiddleware } from 'src/middlewares/CheckAuthenticates.middleware';
+import { CheckAdminMiddleware } from 'src/middlewares/CheckAdmin.middleware';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Permission])],
@@ -15,7 +16,7 @@ import { CheckAuthenticatesMiddleware } from 'src/middlewares/CheckAuthenticates
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(CheckAuthenticatesMiddleware)
+      .apply(CheckAuthenticatesMiddleware, CheckAdminMiddleware)
       .exclude({ path: 'users/(.*)', method: RequestMethod.POST })
       .forRoutes(UsersController);
   }
