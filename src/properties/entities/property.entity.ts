@@ -11,41 +11,41 @@ import { Address } from '../address/entities/address.entity';
 
 @Entity('properties')
 export class Property {
-  @PrimaryColumn('uuid')
+  @PrimaryColumn({ type: 'uuid' })
   id: string;
 
   @Column({ length: 20 })
   propertyName: string;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   propertyOwner: string;
 
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: false })
   description: string;
 
-  @Column({ type: 'tinyint' })
+  @Column({ type: 'tinyint', nullable: false })
   propertyAddressId: number;
 
   @ManyToOne(() => Address)
   @JoinColumn({ name: 'propertyAddressId' })
   address: Address;
 
-  @Column({ type: 'tinyint' })
+  @Column({ type: 'tinyint', nullable: false })
   propertyNumber: string;
 
-  @Column({ length: 20 })
+  @Column({ length: 20, nullable: false })
   typeProperty: string;
 
-  @Column('boolean')
+  @Column({ type: 'boolean', nullable: false })
   available: boolean;
 
-  @Column({ type: 'tinyint' })
+  @Column({ type: 'tinyint', nullable: false })
   dailyRate: number;
 
-  @CreateDateColumn({ type: 'time' })
+  @CreateDateColumn({ type: 'time', nullable: false })
   createdAt: Date;
 
-  @CreateDateColumn({ type: 'time' })
+  @CreateDateColumn({ type: 'time', nullable: false })
   updatedAt: Date;
 
   @Column({ type: 'tinyint' })
