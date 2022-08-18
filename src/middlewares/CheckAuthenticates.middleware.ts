@@ -11,8 +11,8 @@ interface IPayload {
 export class CheckAuthenticatesMiddleware implements NestMiddleware {
   constructor(private readonly usersService: UsersService) {}
 
-  async use(request: Request, response: Response, next: NextFunction) {
-    const authHeader = request.headers.authorization;
+  async use(req: Request, res: Response, next: NextFunction) {
+    const authHeader = req.headers.authorization;
 
     if (!authHeader) {
       throw new Error('Token missing');
@@ -36,7 +36,7 @@ export class CheckAuthenticatesMiddleware implements NestMiddleware {
         throw new Error('Inactive user!');
       }
 
-      request.user = {
+      req.user = {
         id: userId,
       };
 
