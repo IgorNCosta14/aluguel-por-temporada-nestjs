@@ -60,7 +60,8 @@ export class UsersService {
 
   async findById(id: string): Promise<User> {
     const user = await this.repository.findOne({
-      where: { id } /*relations: ["permission"]*/,
+      where: { id },
+      relations: ['permission'],
     });
 
     return user;
