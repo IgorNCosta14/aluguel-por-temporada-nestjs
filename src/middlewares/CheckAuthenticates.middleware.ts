@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import { UsersService } from 'src/users/users.service';
 
@@ -18,7 +18,7 @@ export class CheckAuthenticatesMiddleware implements NestMiddleware {
       throw new Error('Token missing');
     }
 
-    const [, token] = authHeader.split(' ');
+    const token = authHeader.replace('Bearer ', '');
 
     try {
       const { sub: userId } = verify(
