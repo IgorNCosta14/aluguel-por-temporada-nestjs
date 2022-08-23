@@ -113,7 +113,7 @@ export class UsersController {
   }
 
   @Patch('/tolandlord/:id')
-  async update(@Param('id') id: string): Promise<void> {
+  async updateToLandLord(@Param('id') id: string): Promise<void> {
     const user = await this.usersService.findById(id);
 
     if (user.userPermission > 1) {
