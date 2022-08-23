@@ -8,6 +8,7 @@ import { Address } from './properties/address/entities/address.entity';
 import { Property } from './properties/entities/property.entity';
 import { RentalsModule } from './rentals/rentals.module';
 import { DateProviderService } from './utils/date-provider/date-provider.service';
+import { Rental } from './rentals/entities/rental.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { DateProviderService } from './utils/date-provider/date-provider.service
       database: __dirname + '/db.sqlite',
       synchronize: true,
       logging: true,
-      entities: [User, Permission, Address, Property],
+      entities: [User, Permission, Address, Property, Rental],
     }),
     UsersModule,
     PropertiesModule,
