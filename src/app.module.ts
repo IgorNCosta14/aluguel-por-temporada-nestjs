@@ -6,6 +6,8 @@ import { Permission } from './users/permissions/entities/permission.entity';
 import { PropertiesModule } from './properties/properties.module';
 import { Address } from './properties/address/entities/address.entity';
 import { Property } from './properties/entities/property.entity';
+import { RentalsModule } from './rentals/rentals.module';
+import { DateProviderService } from './utils/date-provider/date-provider.service';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { Property } from './properties/entities/property.entity';
     }),
     UsersModule,
     PropertiesModule,
+    RentalsModule,
   ],
+  providers: [DateProviderService],
 })
 export class AppModule {}
