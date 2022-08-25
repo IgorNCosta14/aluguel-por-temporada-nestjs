@@ -12,39 +12,39 @@ import { Property } from 'src/properties/entities/property.entity';
 
 @Entity('rentals')
 export class Rental {
-  @PrimaryColumn()
+  @PrimaryColumn({ type: 'uuid', nullable: false, unique: true })
   id: string;
 
   @ManyToOne(() => Property)
   @JoinColumn({ name: 'propertyId' })
   property: Property;
 
-  @Column()
+  @Column({ type: 'uuid', nullable: false })
   propertyId: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column()
+  @Column({ type: 'uuid' })
   userId: string;
 
-  @Column()
+  @Column({ type: 'tinyint', unique: true, nullable: true })
   totalRate: number;
 
-  @Column()
+  @Column({ type: 'tinyint', nullable: true })
   totalLateFee?: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'time', nullable: false })
   startDate: Date;
 
-  @Column()
+  @Column({ type: 'time', nullable: false })
   expectedReturnDate: Date;
 
-  @Column()
+  @Column({ type: 'tinyint', nullable: false })
   expectedTotalRate: number;
 
-  @Column()
+  @Column({ type: 'time', nullable: true })
   endDate: Date;
 
   constructor() {
