@@ -87,34 +87,6 @@ export class PropertiesController {
     return properties;
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.propertiesService.findOne(+id);
-  // }
-
-  // @Get('/zipCode')
-  // findOne(@Param('id') id: string) {
-  //   return this.propertiesService.findOne(+id);
-  // }
-
-  // @Get('/type')
-  // findOne(@Param('id') id: string) {
-  //   return this.propertiesService.findOne(+id);
-  // }
-
-  // @Get('/userproperty')
-  // findOne(@Param('id') id: string) {
-  //   return this.propertiesService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updatePropertyDto: UpdatePropertyDto,
-  // ) {
-  //   return this.propertiesService.update(+id, updatePropertyDto);
-  // }
-
   @Delete(':id')
   async remove(@Param('id') { id }, @Request() req) {
     const propertyExists = await this.propertiesService.findById(id);
