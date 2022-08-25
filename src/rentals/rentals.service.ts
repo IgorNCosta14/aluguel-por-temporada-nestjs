@@ -83,7 +83,7 @@ export class RentalsService {
 
   async listRentalsInProgress(): Promise<Rental[]> {
     const rentals = await this.repository.find({
-      where: { endDate: null },
+      where: { endDate: IsNull() },
       relations: ['property', 'user'],
     });
     return rentals;
@@ -91,9 +91,5 @@ export class RentalsService {
 
   async delete(id: string): Promise<void> {
     await this.repository.delete({ id: id });
-  }
-
-  async update(data: UpdateRentalDto): Promise<Rental> {
-    throw new Error('Method not implemented.');
   }
 }
