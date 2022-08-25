@@ -66,7 +66,7 @@ export class RentalsController {
     return rentals;
   }
 
-  @Get(':id')
+  @Get('userrental')
   async findById(@Request() req) {
     const rental = await this.rentalsService.findRentalByUserId(req.user.id);
 
@@ -173,8 +173,8 @@ export class RentalsController {
       rental.expectedTotalRate = expectedTotalRate;
     }
 
-    if (expectedTotalRate) {
-      rental.expectedTotalRate = expectedTotalRate;
+    if (expectedReturnDate) {
+      rental.expectedReturnDate = expectedReturnDate;
     }
 
     if (endDate) {
