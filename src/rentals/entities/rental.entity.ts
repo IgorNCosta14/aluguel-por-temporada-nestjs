@@ -29,7 +29,7 @@ export class Rental {
   @Column({ type: 'uuid' })
   userId: string;
 
-  @Column({ type: 'tinyint', unique: true, nullable: true })
+  @Column({ type: 'tinyint', nullable: true })
   totalRate: number;
 
   @Column({ type: 'tinyint', nullable: true })
