@@ -14,12 +14,14 @@ import { UtilsService } from 'src/utils/utils.service';
 import { compare, hash } from 'bcryptjs';
 import { IRequest, IResponse } from './interfaces/authenticate-user.interface';
 import { sign } from 'jsonwebtoken';
+import { PermissionsService } from './permissions/permissions.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly utilsService: UtilsService,
+    private readonly permissionsService: PermissionsService,
   ) {}
 
   @Post()
@@ -116,11 +118,22 @@ export class UsersController {
   async updateToLandLord(@Param('id') id: string): Promise<void> {
     const user = await this.usersService.findById(id);
 
-    if (user.userPermission > 1) {
+    const permission = await this.permissionsService.findById(
+      user.userPermission,
+    );
+
+    if (permission.name !== 'user') {
       throw new Error('User already is landlord or admin!');
     }
 
-    await this.usersService.updateToLandLord(id);
+    const newUserPermission = await this.permissionsService.findByName(
+      'landlord',
+    );
+
+    await this.usersService.updateToLandLord({
+      id,
+      userPermission: newUserPermission.id,
+    });
   }
 
   @Patch('/deactivatinguser/:id')
