@@ -4,7 +4,7 @@ export class CreateUserDto {
   cpf: string;
   email: string;
   password: string;
-  userPermission?: string;
+  userPermission?: number;
   activeUser?: boolean;
   createdAt?: Date;
 }
