@@ -7,11 +7,13 @@ import { User } from './entities/user.entity';
 import { Permission } from './permissions/entities/permission.entity';
 import { CheckAuthenticatesMiddleware } from 'src/middlewares/CheckAuthenticates.middleware';
 import { CheckAdminMiddleware } from 'src/middlewares/CheckAdmin.middleware';
+import { PermissionsService } from './permissions/permissions.service';
+import { PermissionsModule } from './permissions/permissions.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Permission])],
+  imports: [TypeOrmModule.forFeature([User, Permission]), PermissionsModule],
   controllers: [UsersController],
-  providers: [UsersService, UtilsService],
+  providers: [UsersService, UtilsService, PermissionsService],
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
