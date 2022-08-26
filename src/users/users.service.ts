@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -67,10 +67,10 @@ export class UsersService {
     return user;
   }
 
-  async updateToLandLord(id: string): Promise<void> {
+  async updateToLandLord({ id, userPermission }: UpdateUserDto): Promise<void> {
     const user = await this.repository.findOne({ where: { id } });
 
-    user.userPermission = 2;
+    user.userPermission = userPermission;
 
     await this.repository.save(user);
   }
