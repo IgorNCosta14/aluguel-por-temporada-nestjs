@@ -12,6 +12,7 @@ import { Property } from 'src/properties/entities/property.entity';
 import { CheckAuthenticatesMiddleware } from 'src/middlewares/CheckAuthenticates.middleware';
 import { UsersService } from 'src/users/users.service';
 import { CheckLandLordMiddleware } from 'src/middlewares/CheckLandLord.middleware';
+import { CheckAdminMiddleware } from 'src/middlewares/CheckAdmin.middleware';
 
 @Module({
   imports: [
@@ -30,9 +31,14 @@ import { CheckLandLordMiddleware } from 'src/middlewares/CheckLandLord.middlewar
 export class RentalsModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CheckAuthenticatesMiddleware).forRoutes(RentalsController);
-    consumer.apply(CheckLandLordMiddleware).forRoutes({
-      path: 'rentals/devolution/',
-      method: RequestMethod.PATCH,
-    });
+    consumer.apply(CheckLandLordMiddleware).forRoutes('rentals/devolution/:id');
+    consumer
+      .apply(CheckAdminMiddleware)
+      .exclude(
+        { path: 'rentals', method: RequestMethod.POST },
+        { path: 'rentals/userrental', method: RequestMethod.GET },
+        { path: 'rentals/devolution/:id', method: RequestMethod.PATCH },
+      )
+      .forRoutes(RentalsController);
   }
 }
