@@ -10,6 +10,7 @@ import { CheckAuthenticatesMiddleware } from 'src/middlewares/CheckAuthenticates
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersModule } from 'src/users/users.module';
+import { CheckLandLordMiddleware } from 'src/middlewares/CheckLandLord.middleware';
 
 @Module({
   imports: [
@@ -23,7 +24,12 @@ import { UsersModule } from 'src/users/users.module';
 export class PropertiesModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(CheckAuthenticatesMiddleware)
-      .forRoutes({ path: 'properties', method: RequestMethod.ALL });
+      .apply(CheckAuthenticatesMiddleware, CheckLandLordMiddleware)
+      .exclude(
+        { path: 'properties/zipCode', method: RequestMethod.GET },
+        { path: 'properties/type', method: RequestMethod.GET },
+        { path: 'properties/', method: RequestMethod.GET },
+      )
+      .forRoutes(PropertiesController);
   }
 }
