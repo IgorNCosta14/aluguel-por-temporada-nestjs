@@ -13,6 +13,7 @@ export class PropertiesService {
   ) {}
 
   async create({
+    id,
     propertyName,
     description,
     propertyOwner,
@@ -26,6 +27,7 @@ export class PropertiesService {
     lateFee,
   }: CreatePropertyDto): Promise<Property> {
     const property = this.repository.create({
+      id,
       propertyName,
       description,
       propertyOwner,
