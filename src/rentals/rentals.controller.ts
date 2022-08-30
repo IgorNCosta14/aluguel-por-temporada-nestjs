@@ -92,7 +92,7 @@ export class RentalsController {
   }
 
   @Patch('devolution/:id')
-  async devolution(@Param('id') id: string) {
+  async devolution(@Param('id') id: string, @Request() req) {
     const rental = await this.rentalsService.findById(id);
 
     if (rental.endDate != null || rental.totalRate != null) {
@@ -100,6 +100,12 @@ export class RentalsController {
     }
 
     const property = await this.propertiesService.findById(rental.propertyId);
+
+    if (property.propertyOwner !== req.user.id) {
+      throw new Error(
+        'To finalize a rental you must be the owner of the property.',
+      );
+    }
 
     rental.endDate = this.dateProvider.dateNow();
 
