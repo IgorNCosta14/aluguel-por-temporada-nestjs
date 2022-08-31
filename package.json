@@ -19,7 +19,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "run-migrations": "node --require ts-node/register ./node_modules/typeorm/cli.js migration:run -d ./src/database/data-source.ts"
+    "run-migrations": "node --require ts-node/register ./node_modules/typeorm/cli.js migration:run -d ./src/database/data-source.ts",
+    "docker": "docker compose up -d --build -V"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
