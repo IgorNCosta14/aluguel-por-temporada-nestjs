@@ -4,9 +4,9 @@ export class seedPermissions1661546627508 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `INSERT INTO permissions(id, name, "isLandlord", "isAdmin", "createdAt")
-        values(1,'user', false, false, 'now()'),
-        (2, 'landlord', true, false, 'now()'),
-        (3, 'admin', false, true, 'now()')
+        values(default,'user', false, false, 'now()'),
+        (default, 'landlord', true, false, 'now()'),
+        (default, 'admin', false, true, 'now()')
       `,
     );
   }
