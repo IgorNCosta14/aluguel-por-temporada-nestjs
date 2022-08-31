@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  postgres: 
+    container_name: aluguel_nest
+    image: postgres
+    restart: always
+    ports: 
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=aluguel_nest
+      - POSTGRES_PASSWORD=aluguel_nest
+      - POSTGRES_DB=aluguel_nest
+    volumes:
+      - pgdata:/data/postgres
+  app: 
+    container_name: app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: yarn start:dev
+    restart: always
+    ports:
+      - 3333:3333
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    links:
+      - postgres
+    depends_on:
+      - postgres
+volumes:
+  pgdata:
+    driver: local
