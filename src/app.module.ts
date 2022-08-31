@@ -14,12 +14,23 @@ import { PermissionsModule } from './users/permissions/permissions.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: __dirname + '/db.sqlite',
-      synchronize: true,
-      logging: true,
-      entities: [User, Permission, Address, Property, Rental],
+      type: 'postgres',
+      port: 5432,
+      host: 'postgres',
+      username: 'aluguel_nest',
+      password: 'aluguel_nest',
+      database: 'aluguel_nest',
+      migrations: ['dist/database/migrations/**/*.{js,ts}'],
+      entities: ['dist/**/*entity.{js,ts}'],
+      synchronize: false,
     }),
+    // TypeOrmModule.forRoot({
+    //   type: 'sqlite',
+    //   database: __dirname + '/db.sqlite',
+    //   synchronize: true,
+    //   logging: true,
+    //   entities: [User, Permission, Address, Property, Rental],
+    // }),
     UsersModule,
     PermissionsModule,
     PropertiesModule,
