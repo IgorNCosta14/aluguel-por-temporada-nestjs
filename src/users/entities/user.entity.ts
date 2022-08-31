@@ -27,7 +27,7 @@ export class User {
   @Column({ length: 20, nullable: false })
   password: string;
 
-  @Column({ type: 'tinyint' })
+  @Column({ type: 'smallint' })
   userPermission: number;
 
   @ManyToOne(() => Permission)

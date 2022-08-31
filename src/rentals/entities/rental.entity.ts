@@ -29,10 +29,10 @@ export class Rental {
   @Column({ type: 'uuid' })
   userId: string;
 
-  @Column({ type: 'tinyint', nullable: true })
+  @Column({ type: 'smallint', nullable: true })
   totalRate: number;
 
-  @Column({ type: 'tinyint', nullable: true })
+  @Column({ type: 'smallint', nullable: true })
   totalLateFee?: number;
 
   @CreateDateColumn({ type: 'time', nullable: false })
@@ -41,7 +41,7 @@ export class Rental {
   @Column({ type: 'time', nullable: false })
   expectedReturnDate: Date;
 
-  @Column({ type: 'tinyint', nullable: false })
+  @Column({ type: 'smallint', nullable: false })
   expectedTotalRate: number;
 
   @Column({ type: 'time', nullable: true })

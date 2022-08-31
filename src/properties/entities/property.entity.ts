@@ -23,14 +23,14 @@ export class Property {
   @Column({ length: 500, nullable: false })
   description: string;
 
-  @Column({ type: 'tinyint', nullable: false })
+  @Column({ type: 'smallint', nullable: false })
   propertyAddressId: number;
 
   @ManyToOne(() => Address)
   @JoinColumn({ name: 'propertyAddressId' })
   address: Address;
 
-  @Column({ type: 'tinyint', nullable: false })
+  @Column({ nullable: false })
   propertyNumber: string;
 
   @Column({ length: 20, nullable: false })
@@ -39,7 +39,7 @@ export class Property {
   @Column({ type: 'boolean', nullable: false })
   available: boolean;
 
-  @Column({ type: 'tinyint', nullable: false })
+  @Column({ type: 'smallint', nullable: false })
   dailyRate: number;
 
   @CreateDateColumn({ type: 'time', nullable: false })
@@ -48,7 +48,7 @@ export class Property {
   @CreateDateColumn({ type: 'time', nullable: false })
   updatedAt: Date;
 
-  @Column({ type: 'tinyint' })
+  @Column({ type: 'smallint' })
   lateFee: number;
 
   constructor() {
