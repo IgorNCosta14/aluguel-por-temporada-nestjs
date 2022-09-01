@@ -9,6 +9,17 @@ import {
 import { v4 as uuidV4 } from 'uuid';
 import { Address } from '../address/entities/address.entity';
 
+export enum PropertyType {
+  'CASA' = 'casa',
+  'APARTAMENTO' = 'apartamento ',
+}
+
+export enum AvailableStatus {
+  'AVAILABLE' = 'available',
+  'RESERVED' = 'reserved',
+  'UNAVAILABLE' = 'unavailable',
+}
+
 @Entity('properties')
 export class Property {
   @PrimaryColumn({ type: 'uuid' })
@@ -33,11 +44,11 @@ export class Property {
   @Column({ nullable: false })
   propertyNumber: string;
 
-  @Column({ length: 20, nullable: false })
-  typeProperty: string;
+  @Column({ enum: PropertyType, nullable: false })
+  propertyType: PropertyType;
 
-  @Column({ type: 'boolean', nullable: false })
-  available: boolean;
+  @Column({ enum: AvailableStatus, default: 'available', nullable: false })
+  available: AvailableStatus;
 
   @Column({ type: 'smallint', nullable: false })
   dailyRate: number;
@@ -54,7 +65,7 @@ export class Property {
   constructor() {
     if (!this.id) {
       this.id = uuidV4();
-      this.available = true;
+      this.available = AvailableStatus.AVAILABLE;
     }
   }
 }

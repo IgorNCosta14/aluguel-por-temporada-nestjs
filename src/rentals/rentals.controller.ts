@@ -13,6 +13,7 @@ import { CreateRentalDto } from './dto/create-rental.dto';
 import { UpdateRentalDto } from './dto/update-rental.dto';
 import { PropertiesService } from 'src/properties/properties.service';
 import { DateProviderService } from 'src/utils/date-provider/date-provider.service';
+import { AvailableStatus } from 'src/properties/entities/property.entity';
 
 @Controller('rentals')
 export class RentalsController {
@@ -29,7 +30,7 @@ export class RentalsController {
   ) {
     const findProperty = await this.propertiesService.findById(propertyId);
 
-    if (findProperty.available === false) {
+    if (findProperty.available !== AvailableStatus.AVAILABLE) {
       throw new Error('Property not available!');
     }
 
@@ -52,7 +53,7 @@ export class RentalsController {
       expectedTotalRate,
     });
 
-    const available = false;
+    const available = AvailableStatus.RESERVED;
     const id = propertyId;
 
     await this.propertiesService.updateAvailableState({ id, available });
@@ -129,7 +130,7 @@ export class RentalsController {
 
     await this.rentalsService.create(rental);
 
-    const available = true;
+    const available = AvailableStatus.AVAILABLE;
 
     await this.propertiesService.updateAvailableState({
       id: rental.propertyId,

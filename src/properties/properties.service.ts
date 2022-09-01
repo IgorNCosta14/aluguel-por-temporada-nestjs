@@ -3,7 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
-import { Property } from './entities/property.entity';
+import {
+  AvailableStatus,
+  Property,
+  PropertyType,
+} from './entities/property.entity';
 
 @Injectable()
 export class PropertiesService {
@@ -19,7 +23,7 @@ export class PropertiesService {
     propertyOwner,
     propertyAddressId,
     propertyNumber,
-    typeProperty,
+    propertyType,
     available,
     dailyRate,
     createdAt,
@@ -33,7 +37,7 @@ export class PropertiesService {
       propertyOwner,
       propertyAddressId,
       propertyNumber,
-      typeProperty,
+      propertyType,
       available,
       dailyRate,
       createdAt,
@@ -52,7 +56,7 @@ export class PropertiesService {
 
   async listAvailableProperty(): Promise<Property[]> {
     const allProperties = await this.repository.find({
-      where: { available: true },
+      where: { available: AvailableStatus.AVAILABLE },
       relations: ['address'],
     });
 
@@ -78,9 +82,9 @@ export class PropertiesService {
     return property;
   }
 
-  async findByTypeProperty(typeProperty: string): Promise<Property[]> {
+  async findBypropertyType(propertyType: PropertyType): Promise<Property[]> {
     const property = await this.repository.find({
-      where: { typeProperty: typeProperty },
+      where: { propertyType: propertyType },
       relations: ['address'],
     });
 

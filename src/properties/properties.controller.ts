@@ -13,6 +13,7 @@ import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { AddressService } from './address/address.service';
 import { UpdatePropertyDto } from './dto/update-property.dto';
+import { PropertyType } from './entities/property.entity';
 
 @Controller('properties')
 export class PropertiesController {
@@ -28,7 +29,7 @@ export class PropertiesController {
       propertyName,
       description,
       zipCode,
-      typeProperty,
+      propertyType,
       dailyRate,
       country,
       state,
@@ -59,7 +60,7 @@ export class PropertiesController {
       const property = await this.propertiesService.create({
         propertyName,
         description,
-        typeProperty,
+        propertyType,
         propertyOwner: req.user.id,
         propertyAddressId: address.id,
         propertyNumber,
@@ -72,7 +73,7 @@ export class PropertiesController {
       const property = await this.propertiesService.create({
         propertyName,
         description,
-        typeProperty,
+        propertyType,
         propertyOwner: req.user.id,
         propertyAddressId: address.id,
         propertyNumber,
@@ -102,9 +103,11 @@ export class PropertiesController {
   }
 
   @Get('type')
-  async listPropertiesByType(@Query('typeProperty') typeProperty: string) {
-    const property = await this.propertiesService.findByTypeProperty(
-      typeProperty,
+  async listPropertiesByType(
+    @Query('propertyType') propertyType: PropertyType,
+  ) {
+    const property = await this.propertiesService.findBypropertyType(
+      propertyType,
     );
 
     return property;
@@ -124,7 +127,7 @@ export class PropertiesController {
       propertyName,
       description,
       propertyNumber,
-      typeProperty,
+      propertyType,
       dailyRate,
       lateFee,
     }: UpdatePropertyDto,
@@ -153,8 +156,8 @@ export class PropertiesController {
       property.propertyNumber = propertyNumber;
     }
 
-    if (typeProperty) {
-      property.typeProperty = typeProperty;
+    if (propertyType) {
+      property.propertyType = propertyType;
     }
 
     if (dailyRate) {

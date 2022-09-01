@@ -1,3 +1,5 @@
+import { AvailableStatus, PropertyType } from '../entities/property.entity';
+
 export class CreatePropertyDto {
   id?: string;
   propertyName: string;
@@ -5,8 +7,8 @@ export class CreatePropertyDto {
   propertyOwner?: string;
   propertyAddressId?: number;
   propertyNumber: string;
-  typeProperty: string;
-  available?: boolean;
+  propertyType: PropertyType;
+  available?: AvailableStatus;
   dailyRate: number;
   createdAt?: Date;
   updatedAt?: Date;
