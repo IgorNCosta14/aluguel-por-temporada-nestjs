@@ -23,10 +23,37 @@ export class RentalsController {
     private readonly dateProvider: DateProviderService,
   ) {}
 
-  @Post()
-  async create(
-    @Body()
-    { propertyId, userId, expectedReturnDate }: CreateRentalDto,
+  @Patch('confirm/:id')
+  async create(@Param('id') id: string, @Request() req) {
+    const rental = await this.rentalsService.findById(id);
+
+    const startDate = this.dateProvider.dateNow();
+
+    const property = await this.propertiesService.findById(rental.propertyId);
+
+    if (property.propertyOwner !== req.user.id) {
+      throw new Error(
+        'To confirm a rental you must be the owner of the property.',
+      );
+    }
+
+    rental.startDate = startDate;
+
+    const newRental = await this.rentalsService.create(rental);
+
+    await this.propertiesService.updateAvailableState({
+      id: property.id,
+      available: AvailableStatus.UNAVAILABLE,
+    });
+
+    return newRental;
+  }
+
+  @Post('reservation/:id')
+  async reservation(
+    @Body() { expectedReturnDate }: CreateRentalDto,
+    @Param('id') propertyId: string,
+    @Request() req,
   ) {
     const findProperty = await this.propertiesService.findById(propertyId);
 
@@ -48,7 +75,7 @@ export class RentalsController {
 
     const rental = await this.rentalsService.create({
       propertyId,
-      userId,
+      userId: req.user.id,
       expectedReturnDate,
       expectedTotalRate,
     });
@@ -92,6 +119,40 @@ export class RentalsController {
     return rentals;
   }
 
+  @Get('allreserved')
+  async listAllReservedProperties() {
+    const rentals = await this.rentalsService.listAllReservedRentals();
+
+    return rentals;
+  }
+
+  @Get('landlordreservedrentals')
+  async listLandlordReservedRentals(@Request() req) {
+    const rentals = await this.rentalsService.listLandLordReservedRentals(
+      req.user.id,
+    );
+
+    return rentals;
+  }
+
+  @Get('landlordfinishedrentals')
+  async listLandLordRentalsFinished(@Request() req) {
+    const rentals = await this.rentalsService.listLandLordRentalsFinished(
+      req.user.id,
+    );
+
+    return rentals;
+  }
+
+  @Get('landlordrentalsinprogress')
+  async listLandLordRentalsInProgress(@Request() req) {
+    const rentals = await this.rentalsService.listLandLordRentalsInProgress(
+      req.user.id,
+    );
+
+    return rentals;
+  }
+
   @Patch('devolution/:id')
   async devolution(@Param('id') id: string, @Request() req) {
     const rental = await this.rentalsService.findById(id);
@@ -124,8 +185,7 @@ export class RentalsController {
       rental.totalLateFee =
         (totalDaysRental - expectedDaysRental) * property.lateFee;
 
-      rental.totalRate =
-        expectedDaysRental * property.dailyRate + rental.totalLateFee;
+      rental.totalRate = rental.expectedTotalRate + rental.totalLateFee;
     }
 
     await this.rentalsService.create(rental);
