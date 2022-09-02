@@ -9,4 +9,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [PermissionsController],
   providers: [PermissionsService],
 })
-export class PermissionsModule {}
+export class PermissionsModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(CheckAuthenticatesMiddleware)
+  //     .forRoutes(PermissionsController);
+  // }
+}
