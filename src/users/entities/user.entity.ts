@@ -37,7 +37,7 @@ export class User {
   @Column({ type: 'boolean' })
   activeUser: boolean;
 
-  @CreateDateColumn({ type: 'time' })
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
   constructor() {

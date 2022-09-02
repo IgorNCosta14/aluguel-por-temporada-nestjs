@@ -53,10 +53,10 @@ export class Property {
   @Column({ type: 'smallint', nullable: false })
   dailyRate: number;
 
-  @CreateDateColumn({ type: 'time', nullable: false })
+  @CreateDateColumn({ type: 'timestamp', nullable: false })
   createdAt: Date;
 
-  @CreateDateColumn({ type: 'time', nullable: false })
+  @CreateDateColumn({ type: 'timestamp', nullable: false })
   updatedAt: Date;
 
   @Column({ type: 'smallint' })

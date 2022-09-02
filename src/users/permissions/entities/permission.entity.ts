@@ -19,7 +19,7 @@ class Permission {
   @Column({ type: 'boolean' })
   isAdmin: boolean;
 
-  @CreateDateColumn({ type: 'time' })
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
   constructor() {

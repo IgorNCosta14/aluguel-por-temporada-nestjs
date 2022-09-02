@@ -28,16 +28,16 @@ export class Rental {
   @Column({ type: 'smallint', nullable: true })
   totalLateFee?: number;
 
-  @Column({ type: 'time', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   startDate: Date;
 
-  @Column({ type: 'time', nullable: false })
+  @Column({ type: 'timestamp', nullable: false })
   expectedReturnDate: Date;
 
   @Column({ type: 'smallint', nullable: false })
   expectedTotalRate: number;
 
-  @Column({ type: 'time', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   endDate: Date;
 
   constructor() {
