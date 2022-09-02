@@ -39,6 +39,16 @@ export class RentalsService {
     return rental;
   }
 
+  async startRental(id: string): Promise<void> {
+    await this.repository
+      .createQueryBuilder()
+      .update('rentals')
+      .set({ startDate: 'now()' })
+      .where('id=:id', { id })
+      .returning('*')
+      .execute();
+  }
+
   async list(): Promise<Rental[]> {
     const rentals = await this.repository.find({
       relations: ['property', 'user'],
@@ -83,9 +93,54 @@ export class RentalsService {
 
   async listRentalsInProgress(): Promise<Rental[]> {
     const rentals = await this.repository.find({
-      where: { endDate: IsNull() },
+      where: { endDate: IsNull(), startDate: Not(IsNull()) },
       relations: ['property', 'user'],
     });
+    return rentals;
+  }
+
+  async listLandLordRentalsInProgress(id: string): Promise<Rental[]> {
+    const rentals = await this.repository
+      .createQueryBuilder('rentals')
+      .innerJoinAndSelect('rentals.property', 'property')
+      .where({ endDate: IsNull(), startDate: Not(IsNull()) })
+      .andWhere('property.propertyOwner = :id', { id })
+      .getMany();
+
+    return rentals;
+  }
+
+  async listLandLordRentalsFinished(id: string): Promise<Rental[]> {
+    const rentals = await this.repository
+      .createQueryBuilder('rentals')
+      .innerJoinAndSelect('rentals.property', 'property')
+      .where({ endDate: Not(IsNull()), startDate: Not(IsNull()) })
+      .andWhere('property.propertyOwner = :id', { id })
+      .getMany();
+
+    return rentals;
+  }
+
+  async listLandLordReservedRentals(id: string): Promise<Rental[]> {
+    const rentals = await this.repository
+      .createQueryBuilder('rentals')
+      .innerJoinAndSelect('rentals.property', 'property')
+      .where({ startDate: IsNull() })
+      .andWhere('property.propertyOwner = :id', { id })
+      .andWhere('property.available = :available', { available: 'reserved' })
+      .getMany();
+
+    return rentals;
+  }
+
+  async listAllReservedRentals(): Promise<Rental[]> {
+    const rentals = await this.repository
+      .createQueryBuilder('rentals')
+      .innerJoinAndSelect('rentals.property', 'property')
+      .where({ startDate: IsNull() })
+      .andWhere('property.available = :available', { available: 'reserved' })
+      .getMany();
+
     return rentals;
   }
 
