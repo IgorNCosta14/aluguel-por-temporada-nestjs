@@ -31,13 +31,30 @@ import { CheckAdminMiddleware } from 'src/middlewares/CheckAdmin.middleware';
 export class RentalsModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CheckAuthenticatesMiddleware).forRoutes(RentalsController);
-    consumer.apply(CheckLandLordMiddleware).forRoutes('rentals/devolution/:id');
+    consumer.apply(CheckLandLordMiddleware).forRoutes(
+      { path: 'rentals/devolution/:id', method: RequestMethod.PATCH },
+      { path: 'rentals/confirm/:id', method: RequestMethod.PATCH },
+      { path: 'rentals/landlordreservedrentals', method: RequestMethod.GET },
+      { path: 'rentals/landlordfinishedrentals', method: RequestMethod.GET },
+      {
+        path: 'rentals/landlordrentalsinprogress',
+        method: RequestMethod.GET,
+      },
+    );
     consumer
       .apply(CheckAdminMiddleware)
       .exclude(
-        { path: 'rentals', method: RequestMethod.POST },
+        { path: 'rentals/confirm/:id', method: RequestMethod.PATCH },
+        { path: 'rentals/devolution/:id', method: RequestMethod.PATCH },
         { path: 'rentals/userrental', method: RequestMethod.GET },
         { path: 'rentals/devolution/:id', method: RequestMethod.PATCH },
+        { path: 'rentals/reservation/:id', method: RequestMethod.POST },
+        { path: 'rentals/landlordreservedrentals', method: RequestMethod.GET },
+        { path: 'rentals/landlordfinishedrentals', method: RequestMethod.GET },
+        {
+          path: 'rentals/landlordrentalsinprogress',
+          method: RequestMethod.GET,
+        },
       )
       .forRoutes(RentalsController);
   }
