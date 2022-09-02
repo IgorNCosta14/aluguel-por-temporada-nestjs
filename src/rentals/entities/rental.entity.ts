@@ -1,12 +1,5 @@
 import { v4 as uuidV4 } from 'uuid';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Property } from 'src/properties/entities/property.entity';
 
@@ -35,7 +28,7 @@ export class Rental {
   @Column({ type: 'smallint', nullable: true })
   totalLateFee?: number;
 
-  @CreateDateColumn({ type: 'time', nullable: false })
+  @Column({ type: 'time', nullable: true })
   startDate: Date;
 
   @Column({ type: 'time', nullable: false })
